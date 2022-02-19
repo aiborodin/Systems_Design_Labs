@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab3 - Borodin</title>
+    <style>
+        .container {
+            margin-top: 3rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        label, input, button {
+            font-size: 1.5rem;
+        }
+
+        label {
+            width: 300px;
+        }
+
+        p {
+            color: red;
+            font-size: 1.5rem;
+            display: none;
+        }
+
+        .result {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-group">
+        <label for="a">Enter a:</label><input type="text" name="a" id="a" required>
+    </div>
+    <div class="form-group">
+        <label for="b">Enter b:</label><input type="text" name="b" id="b" required>
+    </div>
+    <div class="form-group">
+        <label for="n">Enter number of intervals:</label><input type="number" name="n" id="n" required>
+    </div>
+    <div class="form-group">
+        <label for="result" class="result">Result:</label><input type="text" name="result" id="result" class="result" readonly>
+    </div>
+    <div class="form-group">
+        <button type="button" onclick="calculateResult()">Calculate</button>
+    </div>
+    <div class="form-group">
+        <p id="warning">Please enter correct values!</p>
+    </div>
+</div>
+</body>
+<script>
+    function calcIntegral(intFunc, a, b, n) {
+        let step = (b - a) / n;
+        let recursiveSum = function (x) {
+            if (x >= (b - step)) {
+                return 0;
+            }
+            return intFunc(x) + recursiveSum(x + step);
+        };
+        return step * (intFunc(a) / 2 + recursiveSum(a + step) + intFunc(b) / 2);
+    }
+
+    function calculateResult() {
+        let a = parseFloat(document.getElementById("a").value);
+        let b = parseFloat(document.getElementById("b").value);
+        let n = parseInt(document.getElementById("n").value, 10);
+        if (!isNaN(a) && !isNaN(b) && !isNaN(n)) {
+            document.getElementById("warning").style.display = "none";
+            document.getElementById("result").value = calcIntegral((x) => 1 / Math.log(x), a, b, n)
+        } else {
+            document.getElementById("warning").style.display = "initial";
+        }
+    }
+</script>
+</html>
